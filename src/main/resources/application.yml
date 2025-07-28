@@ -33,5 +33,5 @@ jwt:
   expiration: 3600000 #1시간(ms단위)
 
 kakao:
-  client-id: 71ad85ed78c82915ffeb529b00e34988
+  client-id: (my api code)
   redirect-uri: http://localhost:8080/callback
