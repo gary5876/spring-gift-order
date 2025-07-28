@@ -20,3 +20,12 @@ create table wishes (
     foreign key (member_id) references members(id),
     foreign key (product_id) references products(id)
 );
+
+create table options (
+    id bigint auto_increment primary key,
+    name varchar(50) not null,
+    quantity int not null,
+    product_id bigint not null,
+    unique (product_id, name),
+    foreign key (product_id) references products(id) on delete cascade
+);
