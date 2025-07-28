@@ -117,6 +117,13 @@
         if (!token) {
             buttonArea.appendChild(createButton("로그인", "/admin/members/enter"));
             buttonArea.appendChild(createButton("회원가입", "/admin/members/add"));
+
+            const kakaoBtn = document.createElement("a");
+            kakaoBtn.textContent = "카카오 로그인";
+            kakaoBtn.href = "/kakao/login";
+            kakaoBtn.className = "btn btn-warning me-2";
+            buttonArea.appendChild(kakaoBtn);
+
         } else {
             const payload = parseJwt(token);
             const role = payload?.role;
