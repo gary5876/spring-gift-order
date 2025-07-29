@@ -1,10 +1,9 @@
-package gift.kakaoLogin.service;
+package gift.kakaoLogin.login.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.kakaoLogin.config.KakaoProperties;
-import gift.kakaoLogin.dto.KakaoTokenResponse;
-import gift.kakaoLogin.dto.KakaoUserInfoResponse;
+import gift.kakaoLogin.login.config.KakaoProperties;
+import gift.kakaoLogin.login.dto.KakaoUserInfoResponse;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;

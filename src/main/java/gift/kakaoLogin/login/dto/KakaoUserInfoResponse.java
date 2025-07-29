@@ -1,4 +1,4 @@
-package gift.kakaoLogin.dto;
+package gift.kakaoLogin.login.dto;
 
 import java.util.Map;
 

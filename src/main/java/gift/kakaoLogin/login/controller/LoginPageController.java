@@ -1,11 +1,13 @@
-package gift.kakaoLogin.controller;
+package gift.kakaoLogin.login.controller;
 
-import gift.kakaoLogin.config.KakaoProperties;
+import gift.kakaoLogin.login.config.KakaoProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @Controller
 @RequestMapping("/kakao")
@@ -27,7 +29,7 @@ public class LoginPageController {
 
     private String buildKakaoAuthorizationUrl() {
         return UriComponentsBuilder
-                .fromHttpUrl(KAKAO_AUTH_URL)
+                .fromUri(URI.create(KAKAO_AUTH_URL))
                 .queryParam("response_type", "code")
                 .queryParam("client_id", kakaoProperties.getClientId())
                 .queryParam("redirect_uri", kakaoProperties.getRedirectUri())

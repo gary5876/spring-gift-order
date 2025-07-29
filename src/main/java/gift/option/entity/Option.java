@@ -56,7 +56,7 @@ public class Option {
         this.quantity = newQuantity;
     }
 
-    public void subtractQuantity(int amount) {
+    public void decreaseQuantity(int amount) {
         if (amount <= 0 || amount > quantity) {
             throw new IllegalArgumentException("차감 수량이 잘못되었습니다.");
         }
