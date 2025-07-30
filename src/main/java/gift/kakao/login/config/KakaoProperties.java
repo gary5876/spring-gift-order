@@ -1,4 +1,4 @@
-package gift.kakaoLogin.login.config;
+package gift.kakao.login.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

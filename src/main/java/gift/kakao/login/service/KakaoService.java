@@ -1,9 +1,9 @@
-package gift.kakaoLogin.login.service;
+package gift.kakao.login.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.kakaoLogin.login.config.KakaoProperties;
-import gift.kakaoLogin.login.dto.KakaoUserInfoResponse;
+import gift.kakao.login.config.KakaoProperties;
+import gift.kakao.login.dto.KakaoUserInfoResponse;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -46,9 +46,8 @@ public class KakaoService {
         }
     }
 
-
-
     public KakaoUserInfoResponse getUserInfo(String accessToken) {
+
         String url = "https://kapi.kakao.com/v2/user/me";
 
         HttpHeaders headers = new HttpHeaders();
@@ -62,11 +61,10 @@ public class KakaoService {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            JsonNode root = mapper.readTree(response.getBody());
-            long id = root.get("id").asLong();
-            return new KakaoUserInfoResponse(id);
+            return mapper.readValue(response.getBody(), KakaoUserInfoResponse.class);
         } catch (Exception e) {
             throw new RuntimeException("유저정보 파싱 실패", e);
         }
     }
+
 }

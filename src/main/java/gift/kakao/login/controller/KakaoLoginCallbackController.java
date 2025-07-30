@@ -1,0 +1,37 @@
+package gift.kakao.login.controller;
+
+import gift.kakao.login.dto.KakaoUserInfoResponse;
+import gift.kakao.login.service.KakaoLoginService;
+import gift.kakao.login.service.KakaoService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/kakao")
+public class KakaoLoginCallbackController {
+
+    private final KakaoService kakaoService;
+    private final KakaoLoginService kakaoLoginService;
+
+    public KakaoLoginCallbackController(KakaoService kakaoService, KakaoLoginService kakaoLoginService) {
+        this.kakaoService = kakaoService;
+        this.kakaoLoginService = kakaoLoginService;
+    }
+
+    @GetMapping("/callback")
+    public ResponseEntity<?> callback(@RequestParam("code") String code) {
+
+        String accessToken = kakaoService.getAccessToken(code);
+        KakaoUserInfoResponse userInfo = kakaoService.getUserInfo(accessToken);
+
+        String email = userInfo.kakao_account().email();
+        String jwt = kakaoLoginService.loginByEmail(email);
+
+        return ResponseEntity.ok(Map.of(
+                "token", jwt,
+                "email", email
+        ));
+    }
+}

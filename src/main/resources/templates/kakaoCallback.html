@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>카카오 로그인 처리 중...</title>
+</head>
+<body>
+<script>
+  (async () => {
+    const params = new URLSearchParams(location.search);
+    const code = params.get("code");
+
+    if (!code) {
+      alert("코드가 없습니다.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/kakao/callback?code=${code}`);
+      if (!res.ok) throw new Error(await res.text());
+
+      const { token } = await res.json();
+      localStorage.setItem("accessToken", token);
+
+      location.href = "/admin/products";
+    } catch (e) {
+      alert("로그인 실패: " + e.message);
+    }
+  })();
+</script>
+</body>
+</html>

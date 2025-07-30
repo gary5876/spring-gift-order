@@ -4,6 +4,7 @@ import gift.product.entity.Product;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "options")
 public class Option {
 
     @Id
