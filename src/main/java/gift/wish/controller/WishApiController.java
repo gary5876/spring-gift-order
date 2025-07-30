@@ -33,7 +33,7 @@ public class WishApiController {
 
     @PostMapping
     public ResponseEntity<Void> addWish(@LoginMember Member member, @Valid @RequestBody WishRequest request) {
-        wishService.addWish(member, request.productId());
+        wishService.addWish(member, request.productId(), request.optionId());
         return ResponseEntity.noContent().build();
     }
 

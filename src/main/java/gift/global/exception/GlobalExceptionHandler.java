@@ -75,6 +75,12 @@ public class GlobalExceptionHandler {
         return "redirect:/admin/products/" + ex.getProductId();
     }
 
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleLoginFailed(OptionNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(ErrorCode.OPTION_NOT_FOUND.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralError(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

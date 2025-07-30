@@ -19,6 +19,9 @@
                 <div class="col">
                     <input type="number" id="productId" class="form-control" placeholder="상품 ID 입력" required />
                 </div>
+                <div class="col">
+                    <input type="number" id="optionId" class="form-control" placeholder="옵션 ID 입력" required />
+                </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary">상품 추가</button>
                 </div>
@@ -30,6 +33,7 @@
                     <th>상품명</th>
                     <th>가격</th>
                     <th>이미지</th>
+                    <th>옵션</th>
                     <th>수량</th>
                     <th>작업</th>
                 </tr>
@@ -73,7 +77,7 @@
         if (wishes.length === 0) {
             const row = document.createElement("tr");
             const cell = document.createElement("td");
-            cell.setAttribute("colspan", "5");
+            cell.setAttribute("colspan", "6");
             cell.textContent = "목록에 상품이 없습니다.";
             row.appendChild(cell);
             tbody.appendChild(row);
@@ -83,17 +87,25 @@
         wishes.forEach(product => {
             const row = document.createElement("tr");
 
+            let optionSelectHtml = `<select class="form-select form-select-sm option-select" data-product-id="${product.productId}">`;
+            product.options.forEach(option => {
+                optionSelectHtml += `<option value="${option.optionId}">${option.name} (재고: ${option.quantity})</option>`;
+            });
+            optionSelectHtml += `</select>`;
+
             row.innerHTML = `
         <td>${product.name}</td>
         <td>${product.price}원</td>
         <td><img src="${product.imgUrl}" alt="상품 이미지" width="80"/></td>
+        <td>${optionSelectHtml}</td>
         <td>
-          <input type="number" value="${product.quantity}" min="0"
-                 class="form-control form-control-sm quantity-input" data-id="${product.productId}" />
+            <input type="number" value="1" min="1"
+                class="form-control form-control-sm quantity-input" data-product-id="${product.productId}" />
         </td>
         <td>
-          <button class="btn btn-primary btn-sm me-1" onclick="changeQuantity(${product.productId})">변경</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteWish(${product.productId})">삭제</button>
+            <button class="btn btn-primary btn-sm me-1" onclick="changeQuantity(${product.productId})">변경</button>
+            <button class="btn btn-danger btn-sm me-1" onclick="deleteWish(${product.productId})">삭제</button>
+            <button class="btn btn-success btn-sm" onclick="orderProduct(${product.productId})">주문</button>
         </td>
       `;
 
@@ -120,8 +132,6 @@
     }
 
     async function deleteWish(productId) {
-        console.log("삭제 요청:", productId);
-
         const res = await fetch(`/api/wishes/${productId}`, {
             method: "DELETE",
             headers: { "Authorization": "Bearer " + token }
@@ -168,9 +178,47 @@
         }
     }
 
+    async function orderProduct(productId) {
+        const quantityInput = document.querySelector(`input.quantity-input[data-product-id="${productId}"]`);
+        const optionSelect = document.querySelector(`select.option-select[data-product-id="${productId}"]`);
+
+        const quantity = parseInt(quantityInput.value, 10);
+        const optionId = parseInt(optionSelect.value, 10);
+
+        if (isNaN(quantity) || quantity < 1) {
+            alert("주문 수량은 1 이상이어야 합니다.");
+            return;
+        }
+
+        const res = await fetch("/api/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({
+                productId: productId,
+                optionId: optionId,
+                quantity: quantity,
+                message: "please handle this order with care"
+            })
+        });
+
+        const text = await res.text();
+
+        if (res.ok) {
+            alert("주문이 완료되었습니다. 메시지가 전송되었습니다.");
+            await loadWishes(currentPage);
+        } else {
+            alert(`주문 실패 (${res.status}): ${text}`);
+        }
+    }
+
     document.getElementById("add-wish-form").addEventListener("submit", async function(e) {
         e.preventDefault();
-        const productId = document.getElementById("productId").value;
+
+        const productId = Number(document.getElementById("productId").value);
+        const optionId = Number(document.getElementById("optionId").value);
 
         const res = await fetch("/api/wishes", {
             method: "POST",
@@ -178,17 +226,19 @@
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + token
             },
-            body: JSON.stringify({ productId: Number(productId) })
+            body: JSON.stringify({ productId, optionId })
         });
 
         if (res.ok) {
             alert("상품 추가 완료");
             await loadWishes(currentPage);
             document.getElementById("productId").value = "";
+            document.getElementById("optionId").value = "";
         } else {
             alert("상품 추가 실패: " + await res.text());
         }
     });
+
 
     window.addEventListener("DOMContentLoaded", () => loadWishes());
 </script>

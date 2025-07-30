@@ -1,6 +1,6 @@
 package gift.kakao.order.service;
 
-import gift.kakao.message.service.KakaoMessageService;
+import gift.kakao.login.config.KakaoClient;
 import gift.member.entity.Member;
 import gift.option.entity.Option;
 import gift.option.repository.OptionRepository;
@@ -18,18 +18,18 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OptionRepository optionRepository;
     private final WishRepository wishRepository;
-    private final KakaoMessageService kakaoMessageService;
+    private final KakaoClient kakaoClient;
 
     public OrderService(
             OrderRepository orderRepository,
             OptionRepository optionRepository,
             WishRepository wishRepository,
-            KakaoMessageService kakaoMessageService
+            KakaoClient kakaoClient
     ) {
         this.orderRepository = orderRepository;
         this.optionRepository = optionRepository;
         this.wishRepository = wishRepository;
-        this.kakaoMessageService = kakaoMessageService;
+        this.kakaoClient = kakaoClient;
     }
 
     @Transactional
@@ -44,12 +44,7 @@ public class OrderService {
 
         wishRepository.deleteByMemberAndProduct(member, option.getProduct());
 
-        kakaoMessageService.sendOrderMessageToMe(
-                accessToken,
-                option.getName(),
-                request.quantity(),
-                request.message()
-        );
+        kakaoClient.sendOrderMessage(accessToken, order);
 
         return OrderResponse.from(order);
     }

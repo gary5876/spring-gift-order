@@ -98,6 +98,10 @@ public class Product {
         return imgUrl;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void updateName(String name) {
         validateName(name);
         this.name = name;

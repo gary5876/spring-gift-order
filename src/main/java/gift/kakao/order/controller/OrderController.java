@@ -26,7 +26,12 @@ public class OrderController {
     ) {
         String accessToken = authorizationHeader.replace("Bearer ", "");
 
+        System.out.println("OC_Point1");
+
         OrderResponse response = orderService.order(member, request, accessToken);
+
+        System.out.println("OC_Point2");
+
         return ResponseEntity.status(201).body(response);
     }
 }
