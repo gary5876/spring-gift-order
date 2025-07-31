@@ -23,13 +23,7 @@ public class OrderController {
             @LoginMember Member member,
             @RequestBody OrderRequest request
     ) {
-
-        System.out.println("OC_Point1");
-
         OrderResponse response = orderService.order(member, request);
-
-        System.out.println("OC_Point2");
-
         return ResponseEntity.status(201).body(response);
     }
 }

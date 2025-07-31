@@ -41,38 +41,18 @@ public class OrderService {
 
     @Transactional
     public OrderResponse order(Member member, OrderRequest request) {
-
-        System.out.println("OS_Point0");
-
         Option option = optionRepository.findById(request.optionId())
                 .orElseThrow(() -> new OptionNotFoundException(request.optionId()));
-
-        System.out.println("OS_Point1");
-
         option.decreaseQuantity(request.quantity());
 
-        System.out.println("OS_Point2");
-
         Order order = new Order(option, request.quantity(), request.message());
-
-        System.out.println("OS_Point3");
-
         orderRepository.save(order);
-
-        System.out.println("OS_Point4");
 
         wishRepository.deleteByMemberAndProduct(member, option.getProduct());
 
-        System.out.println("OS_Point5");
-
         KakaoLoginToken token = kakaoRepository.findById(member.getEmail())
                 .orElseThrow(() -> new KakaoTokenNotFoundException(member.getEmail()));
-
-        System.out.println("OS_Point6: " + token.getAccessToken());
-
         kakaoClient.sendOrderMessage(token.getAccessToken(), order);
-
-        System.out.println("OS_Point7");
 
         return OrderResponse.from(order);
     }
