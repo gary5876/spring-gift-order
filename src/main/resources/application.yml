@@ -35,3 +35,5 @@ jwt:
 kakao:
   client-id: (my api code)
   redirect-uri: http://localhost:8080/callback
+  link-url: http://localhost:8080
+  button-title: 주문 확인

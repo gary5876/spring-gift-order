@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.global.exception.KakaoMessageSendException;
 import gift.global.exception.KakaoMessageSerializationException;
 import gift.kakao.order.entity.Order;
+import gift.kakao.login.config.KakaoProperties;
 import gift.option.entity.Option;
 import gift.product.entity.Product;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -20,6 +22,7 @@ public class KakaoClient {
 
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
+    private final KakaoProperties kakaoProperties;
 
     public KakaoClient(
             ObjectMapper objectMapper,
@@ -29,6 +32,7 @@ public class KakaoClient {
         this.restClient = RestClient.builder()
                 .baseUrl(apiBaseUrl)
                 .build();
+        this.kakaoProperties = new KakaoProperties();
     }
 
     public void sendOrderMessage(String kakaoAccessToken, Order order) {
@@ -72,14 +76,14 @@ public class KakaoClient {
     }
 
     private Object buildMessageTemplate(String text) {
-        return java.util.Map.of(
+        return Map.of(
                 "object_type", "text",
                 "text", text,
-                "link", java.util.Map.of(
-                        "web_url", "http://localhost:8080",
-                        "mobile_web_url", "http://localhost:8080"
+                "link", Map.of(
+                        "web_url", kakaoProperties.getLinkUrl(),
+                        "mobile_web_url", kakaoProperties.getLinkUrl()
                 ),
-                "button_title", "주문 확인"
+                "button_title", kakaoProperties.getButtonTitle()
         );
     }
 }
