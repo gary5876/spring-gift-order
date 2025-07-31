@@ -15,8 +15,8 @@ import gift.wish.entity.Wish;
 import gift.wish.repository.WishRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -56,24 +56,32 @@ public class WishService {
                 });
     }
 
-
     @Transactional
     public void addWish(Member member, Long productId, Long optionId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
 
-        Option option = optionRepository.findById(optionId)
-                .orElseThrow(() -> new OptionNotFoundException(optionId));
+        Option option;
+        if (optionId != null) {
+            option = optionRepository.findById(optionId)
+                    .orElseThrow(() -> new OptionNotFoundException(optionId));
+        } else {
+            option = product.getOptions().stream()
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("옵션이 존재하지 않습니다."));
+        }
 
         if (wishRepository.existsByMemberAndProduct(member, product)) {
             throw new WishAlreadyExistsException(product);
         }
 
-        wishRepository.save(new Wish(member, product, option));
+        wishRepository.save(new Wish(member, product, option, 1));
     }
 
     @Transactional
     public void deleteWish(Member member, Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
 
         wishRepository.deleteByMemberAndProduct(member, product);
     }
@@ -93,4 +101,17 @@ public class WishService {
         }
     }
 
+    @Transactional
+    public void updateWishOption(Member member, Long productId, Long optionId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+
+        Wish wish = wishRepository.findByMemberAndProduct(member, product)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new OptionNotFoundException(optionId));
+
+        wish.updateOption(option);
+    }
 }

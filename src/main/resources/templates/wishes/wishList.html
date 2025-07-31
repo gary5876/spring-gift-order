@@ -19,9 +19,6 @@
                 <div class="col">
                     <input type="number" id="productId" class="form-control" placeholder="상품 ID 입력" required />
                 </div>
-                <div class="col">
-                    <input type="number" id="optionId" class="form-control" placeholder="옵션 ID 입력" required />
-                </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary">상품 추가</button>
                 </div>
@@ -87,27 +84,28 @@
         wishes.forEach(product => {
             const row = document.createElement("tr");
 
-            let optionSelectHtml = `<select class="form-select form-select-sm option-select" data-product-id="${product.productId}">`;
+            let optionSelectHtml = `<select class="form-select form-select-sm option-select" data-product-id="${product.productId}" onchange="changeOption(${product.productId})">`;
             product.options.forEach(option => {
-                optionSelectHtml += `<option value="${option.optionId}">${option.name} (재고: ${option.quantity})</option>`;
+                const selected = option.optionId === product.optionId ? 'selected' : '';
+                optionSelectHtml += `<option value="${option.optionId}" ${selected}>${option.name} (재고: ${option.quantity})</option>`;
             });
             optionSelectHtml += `</select>`;
 
             row.innerHTML = `
-        <td>${product.name}</td>
-        <td>${product.price}원</td>
-        <td><img src="${product.imgUrl}" alt="상품 이미지" width="80"/></td>
-        <td>${optionSelectHtml}</td>
-        <td>
-            <input type="number" value="1" min="1"
-                class="form-control form-control-sm quantity-input" data-product-id="${product.productId}" />
-        </td>
-        <td>
-            <button class="btn btn-primary btn-sm me-1" onclick="changeQuantity(${product.productId})">변경</button>
-            <button class="btn btn-danger btn-sm me-1" onclick="deleteWish(${product.productId})">삭제</button>
-            <button class="btn btn-success btn-sm" onclick="orderProduct(${product.productId})">주문</button>
-        </td>
-      `;
+                <td>${product.name}</td>
+                <td>${product.price}원</td>
+                <td><img src="${product.imgUrl}" alt="상품 이미지" width="80"/></td>
+                <td>${optionSelectHtml}</td>
+                <td>
+                    <input type="number" value="${product.quantity}" min="1"
+                        class="form-control form-control-sm quantity-input" data-product-id="${product.productId}" />
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm me-1" onclick="changeQuantity(${product.productId})">변경</button>
+                    <button class="btn btn-danger btn-sm me-1" onclick="deleteWish(${product.productId})">삭제</button>
+                    <button class="btn btn-success btn-sm" onclick="orderProduct(${product.productId})">주문</button>
+                </td>
+            `;
 
             tbody.appendChild(row);
         });
@@ -137,27 +135,20 @@
             headers: { "Authorization": "Bearer " + token }
         });
 
-        const text = await res.text();
-
         if (res.ok) {
             alert("상품이 삭제되었습니다.");
             await loadWishes(currentPage);
         } else {
-            alert(`삭제 실패 (${res.status}): ${text}`);
+            alert(`삭제 실패 (${res.status}): ` + await res.text());
         }
     }
 
     async function changeQuantity(productId) {
-        const input = document.querySelector(`input.quantity-input[data-id="${productId}"]`);
+        const input = document.querySelector(`input.quantity-input[data-product-id="${productId}"]`);
         const quantity = parseInt(input.value, 10);
 
-        if (isNaN(quantity) || quantity < 0) {
-            alert("수량은 0 이상의 숫자여야 합니다.");
-            return;
-        }
-
-        if (quantity === 0) {
-            await deleteWish(productId);
+        if (isNaN(quantity) || quantity < 1) {
+            alert("수량은 1 이상의 숫자여야 합니다.");
             return;
         }
 
@@ -175,6 +166,27 @@
             await loadWishes(currentPage);
         } else {
             alert("수량 변경 실패: " + await res.text());
+        }
+    }
+
+    async function changeOption(productId) {
+        const select = document.querySelector(`select.option-select[data-product-id="${productId}"]`);
+        const optionId = parseInt(select.value, 10);
+
+        const res = await fetch(`/api/wishes/option`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ productId, optionId })
+        });
+
+        if (res.ok) {
+            alert("옵션이 변경되었습니다.");
+            await loadWishes(currentPage);
+        } else {
+            alert("옵션 변경 실패: " + await res.text());
         }
     }
 
@@ -197,28 +209,24 @@
                 "Authorization": "Bearer " + token
             },
             body: JSON.stringify({
-                productId: productId,
-                optionId: optionId,
-                quantity: quantity,
+                productId,
+                optionId,
+                quantity,
                 message: "please handle this order with care"
             })
         });
-
-        const text = await res.text();
 
         if (res.ok) {
             alert("주문이 완료되었습니다. 메시지가 전송되었습니다.");
             await loadWishes(currentPage);
         } else {
-            alert(`주문 실패 (${res.status}): ${text}`);
+            alert(`주문 실패 (${res.status}): ` + await res.text());
         }
     }
 
     document.getElementById("add-wish-form").addEventListener("submit", async function(e) {
         e.preventDefault();
-
         const productId = Number(document.getElementById("productId").value);
-        const optionId = Number(document.getElementById("optionId").value);
 
         const res = await fetch("/api/wishes", {
             method: "POST",
@@ -226,19 +234,17 @@
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + token
             },
-            body: JSON.stringify({ productId, optionId })
+            body: JSON.stringify({ productId })
         });
 
         if (res.ok) {
             alert("상품 추가 완료");
-            await loadWishes(currentPage);
             document.getElementById("productId").value = "";
-            document.getElementById("optionId").value = "";
+            await loadWishes(currentPage);
         } else {
             alert("상품 추가 실패: " + await res.text());
         }
     });
-
 
     window.addEventListener("DOMContentLoaded", () => loadWishes());
 </script>

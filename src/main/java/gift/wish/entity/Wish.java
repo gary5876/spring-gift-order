@@ -64,6 +64,11 @@ public class Wish {
         return option;
     }
 
+    public void updateOption(Option Option) {
+        this.option = Option;
+    }
+
+
     public int getQuantity() {
         return quantity;
     }

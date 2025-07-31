@@ -45,6 +45,14 @@ public class WishApiController {
         wishService.updateWishQuantity(member, request.productId(), request.quantity());
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/option")
+    public ResponseEntity<Void> updateOption(
+            @LoginMember Member member,
+            @Valid @RequestBody WishRequest request
+    ){
+        wishService.updateWishOption(member, request.productId(), request.optionId());
+        return ResponseEntity.noContent().build();
+    }
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteWish(@LoginMember Member member, @PathVariable("productId") Long productId) {

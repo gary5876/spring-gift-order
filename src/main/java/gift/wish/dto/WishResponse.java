@@ -15,7 +15,7 @@ public record WishResponse(
         BigDecimal price,
         String imgUrl,
         int quantity,
-        List<OptionSummary> options  // ✅ 추가
+        List<OptionSummary> options
 ) {
     public static WishResponse from(Wish wish, List<OptionSummary> allOptions) {
         Product product = wish.getProduct();
