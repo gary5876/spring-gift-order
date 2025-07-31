@@ -45,9 +45,6 @@ public class Wish {
         this.quantity = quantity;
     }
 
-    public Wish(Member member, Product product, String option) {
-    }
-
     public Long getId() {
         return id;
     }
@@ -67,7 +64,6 @@ public class Wish {
     public void updateOption(Option Option) {
         this.option = Option;
     }
-
 
     public int getQuantity() {
         return quantity;

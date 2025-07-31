@@ -1,6 +1,8 @@
 package gift.kakao.login.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.global.exception.KakaoMessageSendException;
+import gift.global.exception.KakaoMessageSerializationException;
 import gift.kakao.order.entity.Order;
 import gift.option.entity.Option;
 import gift.product.entity.Product;
@@ -54,7 +56,7 @@ public class KakaoClient {
 
             System.out.println("KC-SOM_Point4");
 
-            throw new RuntimeException("카카오 메시지 템플릿 JSON 직렬화 실패", e);
+            throw new KakaoMessageSerializationException(e);
         }
 
         System.out.println("KC-SOM_Point5");
@@ -81,7 +83,7 @@ public class KakaoClient {
     } catch (Exception e) {
         System.out.println("KC-SOM_Point9 메시지 전송 실패");
         e.printStackTrace();
-        throw new RuntimeException("카카오 메시지 전송 실패", e);
+        throw new KakaoMessageSendException(e);
     }}
 
     private String buildMessageText(Order order) {

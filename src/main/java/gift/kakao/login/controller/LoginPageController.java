@@ -4,13 +4,11 @@ import gift.kakao.login.config.KakaoProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
 @Controller
-//@RequestMapping("/kakao/login")
 public class LoginPageController {
 
     private static final String KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";

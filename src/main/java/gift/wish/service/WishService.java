@@ -68,7 +68,7 @@ public class WishService {
         } else {
             option = product.getOptions().stream()
                     .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("옵션이 존재하지 않습니다."));
+                    .orElseThrow(() -> new OptionNotFoundException(optionId));
         }
 
         if (wishRepository.existsByMemberAndProduct(member, product)) {

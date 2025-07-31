@@ -1,5 +1,7 @@
 package gift.kakao.order.service;
 
+import gift.global.exception.KakaoTokenNotFoundException;
+import gift.global.exception.OptionNotFoundException;
 import gift.kakao.login.config.KakaoClient;
 import gift.kakao.login.entity.KakaoLoginToken;
 import gift.kakao.login.repository.KakaoRepository;
@@ -43,7 +45,7 @@ public class OrderService {
         System.out.println("OS_Point0");
 
         Option option = optionRepository.findById(request.optionId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 옵션이 존재하지 않습니다."));
+                .orElseThrow(() -> new OptionNotFoundException(request.optionId()));
 
         System.out.println("OS_Point1");
 
@@ -64,7 +66,7 @@ public class OrderService {
         System.out.println("OS_Point5");
 
         KakaoLoginToken token = kakaoRepository.findById(member.getEmail())
-                .orElseThrow(() -> new IllegalStateException("카카오 access token이 없습니다."));
+                .orElseThrow(() -> new KakaoTokenNotFoundException(member.getEmail()));
 
         System.out.println("OS_Point6: " + token.getAccessToken());
 

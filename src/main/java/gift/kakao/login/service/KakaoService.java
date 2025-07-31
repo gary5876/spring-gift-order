@@ -6,7 +6,6 @@ import gift.kakao.login.entity.KakaoLoginToken;
 import gift.kakao.login.config.KakaoProperties;
 import gift.kakao.login.dto.KakaoUserInfoResponse;
 import gift.kakao.login.repository.KakaoRepository;
-import gift.member.entity.Member;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
