@@ -63,7 +63,7 @@ public class KakaoClient {
         Product product = option.getProduct();
 
         return String.format(
-                "🛒 주문 완료!\n상품명: %s\n옵션: %s\n수량: %d개\n요청사항: %s",
+                "주문 완료! \n상품명: %s\n옵션: %s\n수량: %d개\n메세지: %s",
                 product.getName(),
                 option.getName(),
                 order.getQuantity(),
