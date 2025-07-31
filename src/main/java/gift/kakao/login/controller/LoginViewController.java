@@ -9,12 +9,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Controller
-public class LoginPageController {
+public class LoginViewController {
 
     private static final String KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
     private final KakaoProperties kakaoProperties;
 
-    public LoginPageController(KakaoProperties kakaoProperties) {
+    public LoginViewController(KakaoProperties kakaoProperties) {
         this.kakaoProperties = kakaoProperties;
     }
 

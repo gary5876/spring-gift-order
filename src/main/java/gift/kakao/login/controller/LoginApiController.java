@@ -10,12 +10,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/kakao")
-public class KakaoLoginCallbackController {
+public class LoginApiController {
 
     private final KakaoService kakaoService;
     private final KakaoLoginService kakaoLoginService;
 
-    public KakaoLoginCallbackController(KakaoService kakaoService, KakaoLoginService kakaoLoginService) {
+    public LoginApiController(KakaoService kakaoService, KakaoLoginService kakaoLoginService) {
         this.kakaoService = kakaoService;
         this.kakaoLoginService = kakaoLoginService;
     }
