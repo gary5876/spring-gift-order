@@ -21,14 +21,12 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponse> order(
             @LoginMember Member member,
-            @RequestBody OrderRequest request,
-            @RequestHeader("Authorization") String authorizationHeader
+            @RequestBody OrderRequest request
     ) {
-        String accessToken = authorizationHeader.replace("Bearer ", "");
 
         System.out.println("OC_Point1");
 
-        OrderResponse response = orderService.order(member, request, accessToken);
+        OrderResponse response = orderService.order(member, request);
 
         System.out.println("OC_Point2");
 

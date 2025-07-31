@@ -23,8 +23,8 @@ public class KakaoLoginCallbackController {
     @GetMapping("/callback")
     public ResponseEntity<?> callback(@RequestParam("code") String code) {
 
-        String accessToken = kakaoService.getAccessToken(code);
-        KakaoUserInfoResponse userInfo = kakaoService.getUserInfo(accessToken);
+        String kakaoAccessToken = kakaoService.getAccessToken(code);
+        KakaoUserInfoResponse userInfo = kakaoService.getUserInfo(kakaoAccessToken);
 
         String email = userInfo.kakao_account().email();
         String jwt = kakaoLoginService.loginByEmail(email);

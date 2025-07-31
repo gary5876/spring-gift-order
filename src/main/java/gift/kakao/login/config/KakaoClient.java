@@ -29,29 +29,60 @@ public class KakaoClient {
                 .build();
     }
 
-    public void sendOrderMessage(String accessToken, Order order) {
+    public void sendOrderMessage(String kakaoAccessToken, Order order) {
+
+        try{
+
+        System.out.println("KC-SOM_Point0");
+
         String messageText = buildMessageText(order);
+
+        System.out.println("KC-SOM_Point1");
+
         String templateJson;
 
+        System.out.println("KC-SOM_Point2");
+
         try {
+
+            System.out.println("KC-SOM_Point3");
+
             templateJson = objectMapper.writeValueAsString(
                     buildMessageTemplate(messageText)
             );
         } catch (Exception e) {
+
+            System.out.println("KC-SOM_Point4");
+
             throw new RuntimeException("카카오 메시지 템플릿 JSON 직렬화 실패", e);
         }
 
+        System.out.println("KC-SOM_Point5");
+
         var body = new LinkedMultiValueMap<String, String>();
+
+        System.out.println("KC-SOM_Point6");
+
         body.add("template_object", templateJson);
+
+        System.out.println("KC-SOM_Point7");
+
+        System.out.println("kakaoAccessToken = " + kakaoAccessToken);
 
         restClient.post()
                 .uri("/v2/api/talk/memo/default/send")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + kakaoAccessToken)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(body)
                 .retrieve()
                 .toBodilessEntity();
-    }
+
+        System.out.println("KC-SOM_Point8: 메시지 전송 성공");
+    } catch (Exception e) {
+        System.out.println("KC-SOM_Point9 메시지 전송 실패");
+        e.printStackTrace();
+        throw new RuntimeException("카카오 메시지 전송 실패", e);
+    }}
 
     private String buildMessageText(Order order) {
         Option option = order.getOption();
