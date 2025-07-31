@@ -1,6 +1,7 @@
 package gift.kakao.login.controller;
 
 import gift.kakao.login.config.KakaoProperties;
+import gift.kakao.login.service.KakaoLoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +12,21 @@ import java.net.URI;
 @Controller
 public class LoginViewController {
 
-    private static final String KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
     private final KakaoProperties kakaoProperties;
+    private final KakaoLoginService kakaoLoginService;
 
-    public LoginViewController(KakaoProperties kakaoProperties) {
+    public LoginViewController(
+            KakaoProperties kakaoProperties,
+            KakaoLoginService kakaoLoginService
+    ) {
         this.kakaoProperties = kakaoProperties;
+        this.kakaoLoginService = kakaoLoginService;
     }
 
 
     @GetMapping("/login")
     public String loginPage(Model model) {
-        String redirectUrl = buildKakaoAuthorizationUrl();
+        String redirectUrl = kakaoLoginService.buildAuthorizationUrl();
         model.addAttribute("location", redirectUrl);
         return "kakaoLogin";
     }
@@ -29,15 +34,5 @@ public class LoginViewController {
     @GetMapping("/callback")
     public String callbackView() {
         return "kakaoCallback";
-    }
-
-    private String buildKakaoAuthorizationUrl() {
-        return UriComponentsBuilder
-                .fromUri(URI.create(KAKAO_AUTH_URL))
-                .queryParam("response_type", "code")
-                .queryParam("client_id", kakaoProperties.getClientId())
-                .queryParam("redirect_uri", kakaoProperties.getRedirectUri())
-                .build()
-                .toUriString();
     }
 }
