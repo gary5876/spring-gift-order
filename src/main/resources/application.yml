@@ -33,7 +33,7 @@ jwt:
   expiration: 3600000 #1시간(ms단위)
 
 kakao:
-  client-id: 71ad85ed78c82915ffeb529b00e34988
+  client-id: (my api key)
   redirect-uri: http://3.34.126.196:8080/callback
   link-url: http://3.34.126.196:8080
   button-title: 주문 확인
