@@ -7,6 +7,8 @@ public record WishRequest(
         @NotNull(message = "상품 ID는 비어있을 수 없습니다.")
         Long productId,
 
+        Long optionId,
+
         @Min(value = 0, message = "수량은 0 이상이어야 합니다.")
         int quantity
 ) {

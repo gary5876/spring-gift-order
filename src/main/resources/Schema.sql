@@ -29,3 +29,13 @@ create table options (
     unique (product_id, name),
     foreign key (product_id) references products(id) on delete cascade
 );
+
+create table orders (
+    id bigint auto_increment primary key,
+    option_id bigint not null,
+    quantity int not null,
+    order_date_time datetime not null,
+    message varchar(500),
+
+    foreign key (option_id) references options(id) on delete cascade
+);

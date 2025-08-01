@@ -75,6 +75,30 @@ public class GlobalExceptionHandler {
         return "redirect:/admin/products/" + ex.getProductId();
     }
 
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleLoginFailed(OptionNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(ErrorCode.OPTION_NOT_FOUND.getMessage()));
+    }
+
+    @ExceptionHandler(KakaoTokenNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleKakaoTokenNotFound(KakaoTokenNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(ErrorCode.KAKAO_ACCESS_CODE_NOT_FOUND.getMessage()));
+    }
+
+    @ExceptionHandler(KakaoMessageSerializationException.class)
+    public ResponseEntity<ErrorResponse> handleKakaoSerializationError(KakaoMessageSerializationException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(KakaoMessageSendException.class)
+    public ResponseEntity<ErrorResponse> handleKakaoSendError(KakaoMessageSendException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralError(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

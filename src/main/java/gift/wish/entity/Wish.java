@@ -2,6 +2,7 @@ package gift.wish.entity;
 
 import gift.member.entity.Member;
 import gift.product.entity.Product;
+import gift.option.entity.Option;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,6 +20,10 @@ public class Wish {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id")
     private Product product;
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "option_id")
+    private Option option;
 
     @Column(nullable = false)
     private int quantity;
@@ -26,15 +31,17 @@ public class Wish {
     protected Wish() {
     }
 
-    public Wish(Member member, Product product) {
+    public Wish(Member member, Product product, Option option) {
         this.member = member;
         this.product = product;
+        this.option = option;
         this.quantity = 1;
     }
 
-    public Wish(Member member, Product product, int quantity) {
+    public Wish(Member member, Product product, Option option,int quantity) {
         this.member = member;
         this.product = product;
+        this.option = option;
         this.quantity = quantity;
     }
 
@@ -48,6 +55,14 @@ public class Wish {
 
     public Product getProduct() {
         return product;
+    }
+    
+    public Option getOption() {
+        return option;
+    }
+
+    public void updateOption(Option Option) {
+        this.option = Option;
     }
 
     public int getQuantity() {

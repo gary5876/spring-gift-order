@@ -1,4 +1,4 @@
-package gift.kakaoLogin.dto;
+package gift.kakao.login.dto;
 
 public class KakaoTokenResponse {
     private String access_token;

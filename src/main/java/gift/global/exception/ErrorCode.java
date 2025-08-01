@@ -32,7 +32,10 @@ public enum ErrorCode {
     OPTION_NAME_INVALID("옵션 이름 형식이 올바르지 않습니다."),
     OPTION_QUANTITY_INVALID("옵션 수량은 1 이상 1억 미만이어야 합니다."),
     OPTION_ALREADY_EXISTS("이미 존재하는 옵션입니다."),
-    OPTION_NOT_FOUND("해당 옵션을 찾을 수 없습니다.");
+    OPTION_NOT_FOUND("해당 옵션을 찾을 수 없습니다."),
+
+    //카카오 관련
+    KAKAO_ACCESS_CODE_NOT_FOUND("kakao access token이 없습니다.");
 
     private final String message;
 

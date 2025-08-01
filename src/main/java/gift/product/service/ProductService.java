@@ -45,7 +45,7 @@ public class ProductService {
     public ProductResponse create(ProductRequest request) {
         Product product = new Product(request.getName(), request.getPrice(), request.getImgUrl());
 
-        Option defaultOption = new Option("dafault", 1, product);
+        Option defaultOption = new Option("default", 1, product);
         product.addOption(defaultOption);
 
         Product saved = repository.save(product);

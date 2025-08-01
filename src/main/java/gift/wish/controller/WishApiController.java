@@ -33,7 +33,7 @@ public class WishApiController {
 
     @PostMapping
     public ResponseEntity<Void> addWish(@LoginMember Member member, @Valid @RequestBody WishRequest request) {
-        wishService.addWish(member, request.productId());
+        wishService.addWish(member, request.productId(), request.optionId());
         return ResponseEntity.noContent().build();
     }
 
@@ -43,6 +43,14 @@ public class WishApiController {
             @Valid @RequestBody WishRequest request
     ) {
         wishService.updateWishQuantity(member, request.productId(), request.quantity());
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/option")
+    public ResponseEntity<Void> updateOption(
+            @LoginMember Member member,
+            @Valid @RequestBody WishRequest request
+    ){
+        wishService.updateWishOption(member, request.productId(), request.optionId());
         return ResponseEntity.noContent().build();
     }
 
