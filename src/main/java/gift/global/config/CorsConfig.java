@@ -26,7 +26,7 @@ public class CorsConfig {
         configuration.setExposedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("api/**", configuration);
+        source.registerCorsConfiguration("/api/**", configuration);
         return new CorsFilter(source);
     }
 }
