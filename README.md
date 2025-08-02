@@ -21,3 +21,5 @@
 ## 배포주소
 - EC2 서버 주소: http://52.78.57.212:8080
 - 시작 페이지: [http://52.78.57.212:8080/admin/products](http://52.78.57.212:8080:8080/admin/products)
+
+<img width="1888" height="1055" alt="image" src="https://github.com/user-attachments/assets/c0490a2d-e0a6-49ec-89a6-c36909a9bc8a" />
