@@ -20,27 +20,4 @@
 
 ## 배포주소
 - EC2 서버 주소: http://13.124.113.245:8080
-- 시작 페이지: [http://13.124.113.245:8080/admin/products](http://3.34.126.196:8080/admin/products)
-
-## 🛠 배포 스크립트 (`deploy.sh`)
-
-```bash
-#!/bin/bash
-
-JAR_NAME="spring-gift-0.0.1-SNAPSHOT.jar"
-
-# 실행 중인 프로세스 종료
-PID=$(pgrep -f $JAR_NAME)
-
-if [ -n "$PID" ]; then
-  echo ">> 기존 실행 중: $PID → 종료"
-  kill -15 $PID
-  sleep 5
-else
-  echo ">> 실행 중인 프로세스 없음"
-fi
-
-# 백그라운드 실행
-echo ">> 새 애플리케이션 실행"
-nohup java -jar $JAR_NAME > /dev/null 2>&1 &
-echo 
+- 시작 페이지: [http://13.124.113.245:8080/admin/products](http://13.124.113.245:8080:8080/admin/products)
