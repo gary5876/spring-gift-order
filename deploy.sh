@@ -32,7 +32,7 @@ echo "=Gradle 빌드="
 ./gradlew clean build
 
 echo "=애플리케이션 실행 ="
-JAR_NAME=$(ls build/libs/*.jar | head -n 1)
+JAR_NAME=$(ls *SNAPSHOT.jar | grep -v plain | head -n 1)
 
 nohup java -jar $JAR_NAME > log.txt 2>&1 &
 echo ">> 실행 완료: $JAR_NAME"
