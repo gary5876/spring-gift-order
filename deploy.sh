@@ -1,19 +1,38 @@
 #!/bin/bash
 
-JAR_NAME="spring-gift-0.0.1-SNAPSHOT.jar"
+set -e
 
-# 실행 중인 프로세스 종료
-PID=$(pgrep -f $JAR_NAME)
+REPO_URL=https://github.com/gary5876/spring-gift-order.git
+APP_NAME=spring-gift
+BRANCH_NAME=step3
+APP_DIR=/home/ubuntu/$APP_NAME
 
+echo "=실행 중인 애플리케이션 종료="
+PID=$(pgrep -f '.jar')
 if [ -n "$PID" ]; then
-  echo ">> 기존 실행 중: $PID → 종료"
+  echo ">> 프로세스 종료: $PID"
   kill -15 $PID
   sleep 5
 else
   echo ">> 실행 중인 프로세스 없음"
 fi
 
-# 백그라운드 실행
-echo ">> 새 애플리케이션 실행"
-nohup java -jar $JAR_NAME > /dev/null 2>&1 &
-echo
+echo "=Git pull or clone="
+if [ -d "$APP_DIR" ]; then
+  cd $APP_DIR
+  git reset --hard
+  git checkout $BRANCH_NAME
+  git pull origin $BRANCH_NAME
+else
+  git clone -b $BRANCH_NAME $REPO_URL $APP_DIR
+  cd $APP_DIR
+fi
+
+echo "=Gradle 빌드="
+./gradlew clean build
+
+echo "=애플리케이션 실행 ="
+JAR_NAME=$(ls build/libs/*.jar | head -n 1)
+
+nohup java -jar $JAR_NAME > log.txt 2>&1 &
+echo ">> 실행 완료: $JAR_NAME"
