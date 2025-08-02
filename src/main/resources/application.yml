@@ -34,6 +34,6 @@ jwt:
 
 kakao:
   client-id: (my api key)
-  redirect-uri: http://3.34.126.196:8080/callback
-  link-url: http://3.34.126.196:8080
+  redirect-uri: http://13.124.113.245:8080/callback
+  link-url: http://13.124.113.245:8080
   button-title: 주문 확인
