@@ -34,7 +34,6 @@ public class KakaoClient {
         this.restClient = RestClient.builder()
                 .baseUrl(apiBaseUrl)
                 .build();
-
     }
 
     public void sendOrderMessage(String kakaoAccessToken, Order order) {
